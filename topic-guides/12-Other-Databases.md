@@ -81,20 +81,35 @@ All three shrink bytes scanned = smaller bill. Memorize the trio.
 ## Question patterns
 
 > *"BI team needs a petabyte-scale data warehouse for complex analytical queries"* → **Redshift** (OLAP, columnar, built for BI)
+
 > *"Query data in S3 from the existing Redshift cluster without loading it"* → **Redshift Spectrum** (extends the warehouse into S3)
+
 > *"Run occasional SQL queries on ALB/VPC logs stored in S3, minimal setup"* → **Athena** (serverless SQL-on-S3)
+
 > *"Reduce Athena costs and speed up queries"* → **Parquet/ORC + compression + partitioning** (bill = TB scanned, so scan less)
+
 > *"Social app needs friend-of-friend recommendations / detect fraud rings"* → **Neptune** (relationships = graph)
+
 > *"Complete, immutable, cryptographically verifiable history of financial records, single organization"* → **QLDB** (centralized ledger)
+
 > *"Multiple companies transact without a trusted central authority"* → **Managed Blockchain** (decentralized — the QLDB foil)
+
 > *"Millions of IoT sensor readings per minute, analyzed over time windows"* → **Timestream** (time-series)
+
 > *"Migrate a MongoDB workload to a managed AWS service"* → **DocumentDB** (keyword match, done)
+
 > *"Migrate a Cassandra workload"* → **Keyspaces** (keyword match, done)
+
 > *"Product catalog needs fuzzy, typo-tolerant full-text search; data is in DynamoDB"* → **OpenSearch** (via DynamoDB Streams → Lambda; DynamoDB can't fuzzy-search)
+
 > *"Analysts' reports are slowing the production OLTP database"* → **move analytics off prod** — to Redshift (the cardinal sin, corrected)
+
 > *"Join historical data in S3 with current tables in the Redshift warehouse"* → **Redshift Spectrum** (Athena can't see Redshift tables)
+
 > *"Redshift cluster must be recoverable in another region"* → **cross-region snapshot copy** (destination region + retention)
+
 > *"MongoDB-compatible JSON documents with rich queries on many fields"* → **DocumentDB**; *"serverless key-based access at any scale"* → **DynamoDB**
+
 > *"Build a social network from user profiles and their interactions"* → **Neptune**
 
 ## Pocket card

@@ -73,18 +73,31 @@ Rule: *needs external calls or real logic* → **Lambda@Edge**; *trivial header/
 ## Question patterns
 
 > *"90-minute video transcoding job — can it run on Lambda?"* → **No — AWS Batch / Fargate** (15-minute hard limit; Step Functions only if divisible into <15-min steps)
+
 > *"Generate a thumbnail whenever an image lands in S3"* → **S3 event notification → Lambda** (the canonical async trigger)
+
 > *"API is fast normally but has latency spikes after idle periods"* → **Provisioned Concurrency** (Pre-warmed = no cold starts)
+
 > *"Lambda scaling overwhelms a legacy database that handles only 50 connections"* → **Reserved Concurrency** cap (Restricted) — and mention **RDS Proxy**
+
 > *"Lambda must query an RDS database in a private subnet"* → **attach Lambda to the VPC + RDS Proxy** (add NAT if it still needs internet)
+
 > *"CPU-intensive function is too slow"* → **increase memory** (CPU scales with memory — the counterintuitive one)
+
 > *"Run a cleanup script every night at 2 AM, no servers"* → **EventBridge schedule → Lambda** (serverless cron)
+
 > *"Validate JWT tokens / call an external auth service at the edge"* → **Lambda@Edge** (network calls allowed; CF Functions can't)
+
 > *"Rewrite URLs or add security headers on millions of requests, cheapest"* → **CloudFront Functions** (sub-ms, ~1/6 price, no network)
+
 > *"Asynchronously invoked function fails and events disappear"* → **DLQ / on-failure destination** (async retries twice, then drops)
+
 > *"Lambda should process SQS messages"* → **Event Source Mapping** (Lambda pulls in batches; failures return to the queue)
+
 > *"S3 in another account must invoke the function"* → **Resource-based (function) policy** (who can invoke me)
+
 > *"Lambda gets AccessDenied decrypting with a KMS key"* → **Grant the execution role in the key policy / role policy** (the role is the principal, not the function)
+
 > *"Store a DB password for Lambda so console users can't read it"* → **Secrets Manager / Parameter Store SecureString**, not plain env vars
 
 ## Pocket card

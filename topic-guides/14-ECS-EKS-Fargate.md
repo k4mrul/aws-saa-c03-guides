@@ -98,20 +98,35 @@ Both are **IAM roles** (trusted by `ecs-tasks.amazonaws.com`) — not resource-b
 ## Question patterns
 
 > *"Run containers without managing any servers or clusters of instances"* → **Fargate** (the phrase "no server management" is the trigger)
+
 > *"Company runs Kubernetes on-premises and wants to migrate to AWS with minimal changes"* → **EKS** ("already Kubernetes" is one of only two EKS signals)
+
 > *"ECS task fails to start; error pulling image from ECR"* → **Task Execution Role** (launch plumbing = execution role)
+
 > *"Application inside the container gets AccessDenied calling DynamoDB"* → **Task Role** (app-level permissions once running)
+
 > *"Containerized GPU-based ML inference, minimize management"* → **ECS on EC2 launch type** (Fargate has NO GPUs)
+
 > *"Automatically scan container images for vulnerabilities"* → **ECR image scanning** (built into the registry)
+
 > *"Assign a dedicated security group to each container/task"* → **awsvpc network mode** (per-task ENI = per-task SG)
+
 > *"Avoid vendor lock-in / portable across clouds"* → **EKS** (Kubernetes is the portability play)
+
 > *"Cost-optimize fault-tolerant containerized batch jobs on Fargate"* → **Fargate Spot** (interruptible = Spot)
+
 > *"Scale container count based on messages waiting in a queue"* → **ECS Service Auto Scaling on SQS queue depth**
+
 > *"Run Kubernetes on our own data-center hardware with EKS tooling"* → **EKS Anywhere** (you manage the cluster)
+
 > *"View on-prem/other-cloud Kubernetes clusters in the EKS console"* → **EKS Connector** (view only)
+
 > *"Scale EKS worker nodes efficiently, right-sized instance types, least ops"* → **Karpenter** (not Cluster Autoscaler + ASGs)
+
 > *"Grant an IAM role access to specific Kubernetes namespaces"* → **aws-auth ConfigMap / access entries (authN) + Kubernetes RBAC (authZ)**
+
 > *"Containers in several AZs need a shared file system"* → **EFS volume** in the task definition
+
 > *"Kubernetes workloads with no nodes to manage"* → **EKS on Fargate**
 
 ## Pocket card

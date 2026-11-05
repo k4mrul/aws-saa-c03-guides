@@ -69,15 +69,25 @@ Client --> API GW --202--> (immediately)
 ## Question patterns
 
 > *"Build a REST API with no servers to manage, pay only per request"* → **API Gateway + Lambda + DynamoDB** (the canonical serverless chain)
+
 > *"SaaS company wants to offer customers different API request limits per pricing tier"* → **Usage Plans + API Keys** (REST API only — per-customer tiers)
+
 > *"Mobile app users must sign in before calling the API"* → **Cognito User Pool authorizer** (app users = Cognito JWTs)
+
 > *"Company has an existing custom/third-party token system for API auth"* → **Lambda Authorizer** (custom logic = your Lambda decides)
+
 > *"Cheapest way to expose a simple Lambda function over HTTP with JWT auth"* → **HTTP API** (~70% cheaper, minimal features)
+
 > *"Push live updates to a real-time dashboard / chat application"* → **WebSocket API** (persistent two-way connection)
+
 > *"API must be accessible only from within the VPC, never the internet"* → **Private endpoint + Interface VPC Endpoint**
+
 > *"Backend process takes 2 minutes; API Gateway requests keep timing out — fix it"* → **Go async: return 202, queue to SQS/Step Functions** (29s is a hard limit; you cannot raise it)
+
 > *"Browser JavaScript from another domain gets blocked calling the API"* → **Enable CORS** on API Gateway
+
 > *"Clients suddenly receive HTTP 429 errors"* → **Throttling** — raise the limit or add caching/usage plans
+
 > *"Limit requests to a legacy backend to 1,000/s while absorbing short bursts"* → **API Gateway throttling (rate + burst, token bucket)** (an ALB cannot throttle)
 
 ## Pocket card

@@ -136,28 +136,51 @@ Existing on-prem app speaking **open broker protocols — MQTT, AMQP, JMS, STOMP
 ## Question patterns
 
 > *"Web tier overwhelmed by traffic spikes; orders being lost"* → **SQS + Auto Scaling worker group** (queue buffers the spike, workers scale on depth)
+
 > *"Messages must be processed in strict order with no duplicates"* → **SQS FIFO** (order + exactly-once; remember 300/3,000 msg/s cap)
+
 > *"One event must notify three downstream systems, and none may miss it even if temporarily down"* → **SNS fan-out to multiple SQS queues** (queues hold messages for sleeping services)
+
 > *"Some SQS messages are being processed twice"* → **Increase the visibility timeout** (processing outlasts the hiding window)
+
 > *"Messages that repeatedly fail are blocking the queue"* → **Dead-Letter Queue with MaxReceiveCount** (quarantine poison messages)
+
 > *"Clickstream analytics: two applications must consume the same real-time data, with ability to reprocess yesterday"* → **Kinesis Data Streams** (multiple consumers + replay = its two kill-shots)
+
 > *"Stream IoT telemetry into S3 with the least operational overhead, no custom code"* → **Kinesis Data Firehose** (zero-code delivery truck to S3)
+
 > *"Reduce cost of consumers polling an often-empty queue"* → **Long polling (20s)** (fewer empty receives)
+
 > *"Migrate an on-prem RabbitMQ/ActiveMQ app using AMQP/JMS/MQTT without rewriting"* → **Amazon MQ** (protocol names = MQ)
+
 > *"Message payloads are 1 MB, exceeding the SQS limit"* → **Store in S3, send a pointer** (256 KB cap)
+
 > *"Each subscriber should only receive certain message types from a topic"* → **SNS message filtering** (filter policy per subscription)
+
 > *"Messages are processed but keep reappearing in the queue"* → **Consumer must call DeleteMessage** after processing (SQS never auto-deletes on receive)
+
 > *"Consumers get many empty responses even though messages exist"* → **Long polling** (`ReceiveMessageWaitTimeSeconds` > 0; short polling samples only some servers)
+
 > *"Orders must not be processed until 10 minutes after they're placed"* → **SQS delay queue** (`DelaySeconds`, max 15 min)
+
 > *"Existing Standard queue must now preserve order"* → **Create a new FIFO queue (name ends in `.fifo`)** (no in-place conversion)
+
 > *"Time-sensitive queue: scale workers so no message waits too long"* → **Scale/alarm on `ApproximateAgeOfOldestMessage`** (not CPU)
+
 > *"One S3 upload event must reach two different SQS queues"* → **S3 event → SNS topic → both SQS queues** (S3 notification has one destination per event)
+
 > *"Email the ops team when a CloudWatch alarm fires on EC2"* → **SNS email subscription** (SES is for app/marketing email)
+
 > *"Send transactional receipts and marketing newsletters to customers"* → **SES**
+
 > *"EC2 in a private subnet with no internet must reach SQS"* → **Interface VPC Endpoint for SQS** (Gateway endpoints are only S3/DynamoDB)
+
 > *"KCL consumers fail; shard iterator expires unexpectedly"* → **Increase write capacity of the KCL DynamoDB lease table**
+
 > *"Kinesis stream hits throughput limits"* → **Add shards (`UpdateShardCount`)** or switch to on-demand mode
+
 > *"Custom long-running processing of a Kinesis stream on EC2"* → **KCL app on Data Streams** (Firehose can't run custom consumers)
+
 > *"Kinesis pipeline doesn't need real-time; reduce cost"* → **Replace with SQS**
 
 ## Pocket card
